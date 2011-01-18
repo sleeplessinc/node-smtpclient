@@ -169,15 +169,6 @@ var send = function(from, to, subject, body, cb, opts) {
 
 }
 
-/*
-send( "clc@sleepless.com", "joe@sleepless.com", "Hi", "This is a body test.\nBlah foo!\n", {
-		host: "smtp.gmail.com",
-		port: 25,
-		user: "clc@sleepless.com",
-		pass: "blortklser",
-		dbg: true,
-})
-*/
 
 exports.send = send
 
