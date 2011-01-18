@@ -31,13 +31,29 @@ var dbg = false
 var log = function(s) { if(dbg) console.log(s) }
 
 
-var send = function(from, to, subject, body, opts) {
+var send = function(from, to, subject, body, cb, opts) {
+
+	// xxx from and to?
+	subject = subject || ""
+	body = body || ""
+	cb = cb || function(){}
+	opts = opts || {}
 
 	dbg = opts.dbg || false
 	var host = opts.host || "localhost"
 	var port = opts.port || 25
 	var user = opts.user || null
 	var pass = opts.pass || null
+
+	log("from="+from)
+	log("to="+to)
+	log("subject="+subject)
+	log("body="+body)
+	log("cb="+cb)
+	log("host="+host)
+	log("port="+port)
+	log("user="+user)
+	log("pass="+pass)
 
 	if(user)
 		user = (new Buffer(user)).toString("base64")
@@ -54,9 +70,11 @@ var send = function(from, to, subject, body, opts) {
 	})
 	sock.on('error', function(e) {
 		log("socket error")
+		cb(e)
 	})
 	sock.on('close', function() {
 		log("socket close")
+		cb(null)
 	})
 	sock.on('secure', function(data) {
 		log("socket SECURE!")
@@ -108,6 +126,7 @@ var send = function(from, to, subject, body, opts) {
 					break;
 				case 11:
 					send("quit")
+					sock.end()
 					state++
 					break;
 				}
@@ -138,6 +157,12 @@ var send = function(from, to, subject, body, opts) {
 					state++
 					break;
 				}
+			}
+			else
+			if(n >= 500 && n <= 600) {
+				sock.end()
+				state++
+				cb(msg)
 			}
 		})
 	})
