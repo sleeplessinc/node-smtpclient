@@ -2,6 +2,7 @@ An smtp client.
 Designed to send email out through a gmail account with a gmail username and password.
 Uses TLS/SSL (required by gmail)
 I'll turn this into a proper module soon.
+It's exceedingly dumb at the moment, though I am actually using it in a production env.
 
 For now, it just exports a single, simple function:
 

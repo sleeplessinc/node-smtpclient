@@ -26,11 +26,6 @@ net = require("net")
 crypto = require("crypto")
 require("./slicer")
 
-
-var dbg = false
-var log = function(s) { if(dbg) console.log(s) }
-
-
 var send = function(from, to, subject, body, cb, opts) {
 
 	// xxx from and to?
@@ -39,51 +34,34 @@ var send = function(from, to, subject, body, cb, opts) {
 	cb = cb || function(){}
 	opts = opts || {}
 
-	dbg = opts.dbg || false
 	var host = opts.host || "localhost"
 	var port = opts.port || 25
 	var user = opts.user || null
 	var pass = opts.pass || null
-
-	log("from="+from)
-	log("to="+to)
-	log("subject="+subject)
-	log("body="+body)
-	log("cb="+cb)
-	log("host="+host)
-	log("port="+port)
-	log("user="+user)
-	log("pass="+pass)
 
 	if(user)
 		user = (new Buffer(user)).toString("base64")
 	if(pass)
 		pass = (new Buffer(pass)).toString("base64")
 
-
 	var slicer = new Slicer("\r\n")
 
 	var sock = net.createConnection(port, host);
 	sock.on('connect', function(data) {
-		log("connected to "+host)
 		sock.setEncoding('utf8');
 	})
 	sock.on('error', function(e) {
-		log("socket error")
 		cb(e)
 	})
 	sock.on('close', function() {
-		log("socket close")
 		cb(null)
 	})
 	sock.on('secure', function(data) {
-		log("socket SECURE!")
 		send("helo sleepless.com")
 		state++;
 	})
 
 	var send = function(s) {
-		log("client says, "+s)
 		sock.write(s+"\r\n")
 	}
 
@@ -92,7 +70,6 @@ var send = function(from, to, subject, body, cb, opts) {
 
 	sock.on('data', function(data) {
 		slicer.next(data, function(msg) {
-			log("server says, "+msg)
 			var n = parseInt(msg)
 			if(n >= 200 && n <= 300) {
 				switch(state) {
@@ -169,7 +146,5 @@ var send = function(from, to, subject, body, cb, opts) {
 
 }
 
-
 exports.send = send
-
 
