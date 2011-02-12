@@ -10,6 +10,9 @@ The module exports a single function:
 
 	send(from, to, user, pass, opts, cb)
 
+When the send function has finished its work, the callback function will be called.
+It will either be passed an error argument or no argument if the email was sent successfully
+
 ### Required arguments:
 
 * `from` -- The address to place in the "From:" header.  Also used for "mailfrom" in the SMTP conversation.
@@ -23,7 +26,7 @@ The module exports a single function:
 
 ### Options:
 
-Any values provided in the `opts` argument will over the defaults.
+Any values provided in the `opts` argument will override the defaults.
 The supported values are listed here with their defaults:
 
 * `host` -- "localhost"
@@ -31,10 +34,6 @@ The supported values are listed here with their defaults:
 * `subject` -- ""
 * `body` -- ""
 * `srcHost` -- "localhost"
-
-
-The callback function will either be passed an error argument or no argument if the email was
-sent successfully
 
 ### Example: 
 
