@@ -32,7 +32,7 @@ Supported options with their defaults:
 
 ## Example: 
 
-	smtpclient = require("./smtpclient")
+	smtpclient = require("smtpclient")
 
 	var from = "bart@sleepless.com"
 	var to = "lisa@sleepless.com"
