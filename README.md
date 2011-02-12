@@ -19,7 +19,7 @@ The module exports a single function:
 
 ### Optional arguments:
 
-* cb - Async all back function.  Called on errors, and when the email has been successfully sent.
+* `cb` -- Async all back function.  Called on errors, and when the email has been successfully sent.
 
 The callback function will either be passed an error argument or no argument if the email was
 sent successfully
