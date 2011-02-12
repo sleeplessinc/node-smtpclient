@@ -1,4 +1,4 @@
-## smtp-client
+# smtp-client
 
 This module implements a simplified SMTP client.
 It was designed to send email out through a gmail account with a gmail username and password.
@@ -11,18 +11,18 @@ The module exports a single function:
 When the send function has finished its work, the callback function will be called.
 It will either be passed an error argument or no argument if the email was sent successfully
 
-### Required arguments:
+## Required arguments:
 
 * `from` -- The address to place in the "From:" header.  Also used for "mailfrom" in the SMTP conversation.
 * `to` -- The address to which the email will be sent
 * `srcHost` -- The domain name used for "helo" in the SMTP protocol
 * `opts` -- An object containing additional optional values.  The opts object itself is required, but can be `{}`.  Any values in the object will override the defaults.
 
-### Optional arguments:
+## Optional arguments:
 
 * `cb` -- Async call back function.  Called on errors, and when the email has been successfully sent.
 
-### Options:
+## Options:
 
 Any values provided in the `opts` argument will override the defaults.
 The supported values are listed here with their defaults:
@@ -33,7 +33,7 @@ The supported values are listed here with their defaults:
 * `body` -- ""
 * `srcHost` -- "localhost"
 
-### Example: 
+## Example: 
 
 	smtpclient = require("./smtpclient")
 
