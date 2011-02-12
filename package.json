@@ -1,8 +1,8 @@
-{"name":"smtp-client"
+{"name":"smtpclient"
 ,"version":"1.0.0"
 ,"description":"SMTP client supporting AUTH and TLS/SSL"
 ,"author":"Joe Hitchens <joe@sleepless.com>"
-,"license":{"type":"MIT" ,"url":"https://github.com/sleeplessinc/smtp-client/raw/master/LICENSE"}
-,"main":"smtp-client.js"
-,"repositories":[{"type":"git","url":"https://sleeplessinc@github.com/sleeplessinc/smtp-client.git"}]
+,"license":{"type":"MIT" ,"url":"https://github.com/sleeplessinc/smtpclient/raw/master/LICENSE"}
+,"main":"smtpclient.js"
+,"repositories":[{"type":"git","url":"https://sleeplessinc@github.com/sleeplessinc/smtpclient.git"}]
 }
