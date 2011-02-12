@@ -44,27 +44,28 @@ var Slicer = function(mark) {
 	}
 }
 
-var throwIf(c, s) { if(e) throw new Error(s) }
+var throwIf = function(c, s) { if(c) throw s }
 
-var send = function(from, to, srcHost, opts, cb) {
+var send = function(from, to, user, pass, opts, cb) {
 	try {
 
-		throwIf(!srcHost, "Invalid 'srcHost' argument")
 		throwIf(!from, "Invalid 'from' argument")
 		throwIf(!to, "Invalid 'to' argument")
 		throwIf(!user, "Invalid 'user' argument")
 		throwIf(!pass, "Invalid 'pass' argument")
 
-		cb = cb || function(){}
+		user = (new Buffer(user)).toString("base64")
+		pass = (new Buffer(pass)).toString("base64")
+
+		var nofunc = function(){}
+		cb = cb || nofunc
 		opts = opts || {}
 
 		var host = opts.host || "localhost"
 		var port = opts.port || 25
 		var subject = opts.subject || ""
 		var body = opts.body || ""
-
-		user = (new Buffer(user)).toString("base64")
-		pass = (new Buffer(pass)).toString("base64")
+		var srcHost = opts.srcHost || "localhost"
 
 		var slicer = new Slicer("\r\n")
 
@@ -74,16 +75,18 @@ var send = function(from, to, srcHost, opts, cb) {
 		})
 		sock.on('error', function(e) {
 			cb(e)
+			cb = nofunc
 		})
 		sock.on('close', function() {
-			cb(null)
+			cb("Socket closed unexpectedly")
+			cb = nofunc
 		})
 		sock.on('secure', function(data) {
-			send("helo "+sendHost)
+			w("helo "+srcHost)
 			state++;
 		})
 
-		var send = function(s) {
+		var w = function(s) {
 			sock.write(s+"\r\n")
 		}
 
@@ -96,11 +99,11 @@ var send = function(from, to, srcHost, opts, cb) {
 				if(n >= 200 && n <= 300) {
 					switch(state) {
 					case 0:
-						send("helo "+sendHost)
+						w("helo "+srcHost)
 						state++
 						break;
 					case 1:
-						send("STARTTLS")
+						w("STARTTLS")
 						state++
 						break;
 					case 2:
@@ -108,24 +111,26 @@ var send = function(from, to, srcHost, opts, cb) {
 						state++
 						break;
 					case 4:
-						send("auth login")
+						w("auth login")
 						state++
 						break;
 					case 7:
-						send("mail from:<"+from+">")
+						w("mail from:<"+from+">")
 						state++
 						break;
 					case 8:
-						send("rcpt to:<"+to+">")
+						w("rcpt to:<"+to+">")
 						state++
 						break;
 					case 9:
-						send("data")
+						w("data")
 						state++
 						break;
 					case 11:
-						send("quit")
+						w("quit")
 						sock.end()
+						cb(null)		// success
+						cb = nofunc
 						state++
 						break;
 					}
@@ -134,25 +139,25 @@ var send = function(from, to, srcHost, opts, cb) {
 				if(n >= 300 && n <= 400) {
 					switch(state) {
 					case 5:
-						send(user)
+						w(user)
 						state++
 						break;
 					case 6:
-						send(pass)
+						w(pass)
 						state++
 						break;
 					case 10:
-						send("From: "+from)
-						send("To: "+to)
-						send("Subject: "+subject)
-						send("Message-ID: <"+(new Date().getTime())+from+">")
-						send("Content-Type: text/plain; charset=\"iso-8859-1\"")
-						send("")
+						w("From: "+from)
+						w("To: "+to)
+						w("Subject: "+subject)
+						w("Message-ID: <"+(new Date().getTime())+from+">")
+						w("Content-Type: text/plain; charset=\"iso-8859-1\"")
+						w("")
 						body = body.replace(/\r\n/g, "\n")
 						body = body.replace(/\n/g, "\r\n")
-						send(body)
-						send("")
-						send(".")
+						w(body)
+						w("")
+						w(".")
 						state++
 						break;
 					}
@@ -162,6 +167,7 @@ var send = function(from, to, srcHost, opts, cb) {
 					sock.end()
 					state++
 					cb(msg)
+					cb = nofunc
 				}
 			})
 		})
@@ -171,4 +177,27 @@ var send = function(from, to, srcHost, opts, cb) {
 }
 
 exports.send = send
+
+
+if(true) {
+
+	var from = "bart@simpsons.org"
+	var to = "joe@sleepless.com"
+	var user =  "jh@sleepless.com"
+	var pass = "carbon"
+	var opts = {
+		subject: "Hey Lisa ...",
+		body: "Don't have a cow, man.",
+		host: "smtp.gmail.com",
+		port: 25,
+		srcHost: "localhost",
+	}
+
+	send(from, to, user, pass, opts, function(e, m) {
+		if(e) 
+			console.log("Poo! "+e)
+		else
+			console.log("Yay!")
+	})
+}
 

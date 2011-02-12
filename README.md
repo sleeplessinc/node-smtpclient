@@ -8,7 +8,7 @@ It ALWAYS uses both AUTH and TLS/SSL
 
 The module exports a single function:
 
-	send(from, to, srcHost, opts, cb)
+	send(from, to, user, pass, opts, cb)
 
 ### Required arguments:
 
@@ -40,7 +40,7 @@ sent successfully
 		pass: "eatmyshorts",
 	}
 
-	smtpclient.send(from, to, subject, body, opts, function(e) {
+	smtpclient.send(from, to, user, pass, opts, function(e) {
 		if(e) 
 			console.log("Error: "+e)
 		else
