@@ -15,10 +15,10 @@ The module exports a single function:
 * from - The address to place in the "From:" header.  Also used for "mailfrom" in the SMTP conversation.
 * to - The address to which the email will be sent
 * srcHost - The domain name used for "helo" in the SMTP protocol
+* opts - An object containing additional optional values
 
 ### Optional arguments:
 
-* opts - An object containing additional optional values
 * cb - Async all back function.  Called on errors, and when the email has been successfully sent.
 
 The callback function will either be passed an error argument or no argument if the email was
@@ -40,11 +40,11 @@ sent successfully
 		body: "Don't have a cow, man.",
 	}
 
-	smtpclient.send(from, to, subject, body, function(e) {
+	smtpclient.send(from, to, subject, body, opts, function(e) {
 		if(e) 
 			console.log("Error: "+e)
 		else
 			console.log("Email sent!")
-	}, opts)
+	})
 
 
