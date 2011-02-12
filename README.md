@@ -3,22 +3,24 @@
 This module implements a simplified SMTP client.
 **Always uses both AUTH and TLS/SSL.**
 
-Exports a single function:
+Module exports a single function:
 
 	send(from, to, user, pass, opts, callback)
 
-## Required:
+## Arguments
+
+### Required:
 
 * `from` -- Address to place in "From:" header.  Also used for "mailfrom" in SMTP conversation.
 * `to` -- Address to which the email will be sent
 * `srcHost` -- Domain name used for "helo" in the SMTP protocol
 * `opts` -- Object containing options which override defaults.  May be `{}`.
 
-## Optional:
+### Optional:
 
 * `cb` -- Called with one `error` argument or null if mail sent successfully.
 
-## Options:
+### Options:
 
 Options provided in the `opts` argument will override the defaults.
 Supported options with their defaults:
