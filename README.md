@@ -1,31 +1,27 @@
 # smtp-client
 
 This module implements a simplified SMTP client.
-It was designed to send email out through a gmail account with a gmail username and password.
-It **always** uses **both** AUTH and TLS/SSL.
+**Always** uses both AUTH and TLS/SSL.
 
-The module exports a single function:
+Exports a single function:
 
-	send(from, to, user, pass, opts, cb)
+	send(from, to, user, pass, opts, callback)
 
-When the send function has finished its work, the callback function will be called.
-It will either be passed an error argument or no argument if the email was sent successfully
+## Required:
 
-## Required arguments:
+* `from` -- Address to place in "From:" header.  Also used for "mailfrom" in SMTP conversation.
+* `to` -- Address to which the email will be sent
+* `srcHost` -- Domain name used for "helo" in the SMTP protocol
+* `opts` -- Object containing options which override defaults.  May be `{}`.
 
-* `from` -- The address to place in the "From:" header.  Also used for "mailfrom" in the SMTP conversation.
-* `to` -- The address to which the email will be sent
-* `srcHost` -- The domain name used for "helo" in the SMTP protocol
-* `opts` -- An object containing additional optional values.  The opts object itself is required, but can be `{}`.  Any values in the object will override the defaults.
+## Optional:
 
-## Optional arguments:
-
-* `cb` -- Async call back function.  Called on errors, and when the email has been successfully sent.
+* `cb` -- Called with one `error` argument or null if mail sent successfully.
 
 ## Options:
 
-Any values provided in the `opts` argument will override the defaults.
-The supported values are listed here with their defaults:
+Options provided in the `opts` argument will override the defaults.
+Supported options with their defaults:
 
 * `host` -- "localhost"
 * `port` -- 25
