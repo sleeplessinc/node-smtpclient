@@ -2,7 +2,7 @@
 
 This module implements a simplified SMTP client.
 It was designed to send email out through a gmail account with a gmail username and password.
-It #ALWAYS uses both AUTH and TLS/SSL 
+It **always** uses **both** AUTH and TLS/SSL.
 
 The module exports a single function:
 
