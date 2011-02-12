@@ -1,32 +1,31 @@
 ## smtp-client
 
 This module implements a simplified SMTP client.
-Call `require('smtp-client')` to use it.
 
 This module was designed to send email out through a gmail account with
 a gmail username and password.  Uses TLS/SSL (required by gmail)
 
 The module exports a single function:
 
-### send(from, to, srcHost, opts, cb)
+	send(from, to, srcHost, opts, cb)
 
 Required arguments:
 
-	* from - The address to place in the "From:" header.  Also used for "mailfrom" in the SMTP conversation.
-	* to - The address to which the email will be sent
-	* srcHost - The domain name used for "helo" in the SMTP protocol
+* from - The address to place in the "From:" header.  Also used for "mailfrom" in the SMTP conversation.
+* to - The address to which the email will be sent
+* srcHost - The domain name used for "helo" in the SMTP protocol
 
 Optional arguments:
 
-	* opts - An object containing additional optional values
-	* cb - Async all back function.  Called on errors, and when the email has been successfully sent.
+* opts - An object containing additional optional values
+* cb - Async all back function.  Called on errors, and when the email has been successfully sent.
 
 The callback function will either be passed an error argument or no argument if the email was
 sent successfully
 
 NOTE: 
 	
-	* The protocol will ALWAYS use AUTH and it will ALWAYS use TLS/SSL 
+* The protocol will ALWAYS use AUTH and it will ALWAYS use TLS/SSL 
 
 Example: 
 
