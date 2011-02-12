@@ -15,7 +15,7 @@ The module exports a single function:
 * from - The address to place in the "From:" header.  Also used for "mailfrom" in the SMTP conversation.
 * to - The address to which the email will be sent
 * srcHost - The domain name used for "helo" in the SMTP protocol
-* opts - An object containing additional optional values
+* opts - An object containing additional optional values.  The opts object itself is required, but can be `{}`.  Any values in the object will override the defaults.
 
 ### Optional arguments:
 
@@ -33,11 +33,11 @@ sent successfully
 	var srcHost = "sleepless.com"
 	var opts = {
 		subject: "Hey Lisa ...",
+		body: "Don't have a cow, man.",
 		host: "smtp.gmail.com",
 		port: 25,
 		user: "sk8dude@gmail.com",
 		pass: "eatmyshorts",
-		body: "Don't have a cow, man.",
 	}
 
 	smtpclient.send(from, to, subject, body, opts, function(e) {
