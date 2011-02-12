@@ -17,11 +17,21 @@ The module exports a single function:
 * `srcHost` -- The domain name used for "helo" in the SMTP protocol
 * `opts` -- An object containing additional optional values.  The opts object itself is required, but can be `{}`.  Any values in the object will override the defaults.
 
-** host -- "localhost"
-
 ### Optional arguments:
 
 * `cb` -- Async call back function.  Called on errors, and when the email has been successfully sent.
+
+### Options:
+
+The values in the `opts` argument are optional.
+Those supported are listed here with their defaults if not provided.
+
+* host -- "localhost"
+* port -- 25
+* subject -- ""
+* body -- ""
+* srcHost -- "localhost"
+
 
 The callback function will either be passed an error argument or no argument if the email was
 sent successfully
