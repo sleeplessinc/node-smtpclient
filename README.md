@@ -3,19 +3,20 @@
 This module implements a simplified SMTP client.
 
 This module was designed to send email out through a gmail account with
-a gmail username and password.  Uses TLS/SSL (required by gmail)
+a gmail username and password.
+It ALWAYS uses both AUTH and TLS/SSL 
 
 The module exports a single function:
 
 	send(from, to, srcHost, opts, cb)
 
-Required arguments:
+### Required arguments:
 
 * from - The address to place in the "From:" header.  Also used for "mailfrom" in the SMTP conversation.
 * to - The address to which the email will be sent
 * srcHost - The domain name used for "helo" in the SMTP protocol
 
-Optional arguments:
+### Optional arguments:
 
 * opts - An object containing additional optional values
 * cb - Async all back function.  Called on errors, and when the email has been successfully sent.
@@ -23,11 +24,7 @@ Optional arguments:
 The callback function will either be passed an error argument or no argument if the email was
 sent successfully
 
-NOTE: 
-	
-* The protocol will ALWAYS use AUTH and it will ALWAYS use TLS/SSL 
-
-Example: 
+### Example: 
 
 	smtpclient = require("./smtpclient")
 
