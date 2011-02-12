@@ -1,10 +1,8 @@
 ## smtp-client
 
 This module implements a simplified SMTP client.
-
-This module was designed to send email out through a gmail account with
-a gmail username and password.
-It ALWAYS uses both AUTH and TLS/SSL 
+It was designed to send email out through a gmail account with a gmail username and password.
+It #ALWAYS uses both AUTH and TLS/SSL 
 
 The module exports a single function:
 
