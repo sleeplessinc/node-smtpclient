@@ -19,7 +19,7 @@ The module exports a single function:
 
 ### Optional arguments:
 
-* `cb` -- Async all back function.  Called on errors, and when the email has been successfully sent.
+* `cb` -- Async call back function.  Called on errors, and when the email has been successfully sent.
 
 The callback function will either be passed an error argument or no argument if the email was
 sent successfully
@@ -28,16 +28,16 @@ sent successfully
 
 	smtpclient = require("./smtpclient")
 
-	var from = "bart@simpsons.org"
-	var to = "lisa@simpsons.org"
-	var srcHost = "sleepless.com"
+	var from = "bart@sleepless.com"
+	var to = "lisa@sleepless.com"
+	var user =  "bart@sleepless.com"
+	var pass = "eatmyshorts"
 	var opts = {
-		subject: "Hey Lisa ...",
+		subject: "Testing ...",
 		body: "Don't have a cow, man.",
 		host: "smtp.gmail.com",
 		port: 25,
-		user: "sk8dude@gmail.com",
-		pass: "eatmyshorts",
+		srcHost: "localhost",
 	}
 
 	smtpclient.send(from, to, user, pass, opts, function(e) {

@@ -181,12 +181,12 @@ exports.send = send
 
 if(true) {
 
-	var from = "bart@simpsons.org"
-	var to = "joe@sleepless.com"
-	var user =  "jh@sleepless.com"
-	var pass = "carbon"
+	var from = "bart@sleepless.com"
+	var to = "lisa@sleepless.com"
+	var user =  "bart@sleepless.com"
+	var pass = "xxxx"
 	var opts = {
-		subject: "Hey Lisa ...",
+		subject: "Testing ...",
 		body: "Don't have a cow, man.",
 		host: "smtp.gmail.com",
 		port: 25,
