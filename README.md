@@ -1,7 +1,7 @@
 # smtp-client
 
 This module implements a simplified SMTP client.
-**Always** uses both AUTH and TLS/SSL.
+**Always uses both AUTH and TLS/SSL.**
 
 Exports a single function:
 
