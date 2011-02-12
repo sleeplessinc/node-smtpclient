@@ -23,8 +23,8 @@ The module exports a single function:
 
 ### Options:
 
-The values in the `opts` argument are optional.
-Those supported are listed here with their defaults if not provided.
+Any values provided in the `opts` argument will over the defaults.
+The supported values are listed here with their defaults:
 
 * `host` -- "localhost"
 * `port` -- 25
