@@ -1,30 +1,54 @@
-An smtp client.
-Designed to send email out through a gmail account with a gmail username and password.
-Uses TLS/SSL (required by gmail)
-I'll turn this into a proper module soon.
-It's exceedingly dumb at the moment, though I am actually using it in a production env.
+## smtp-client
 
-For now, it just exports a single, simple function:
+This module implements a simplified SMTP client.
+Call `require('smtp-client')` to use it.
 
-    send(from, to, subject, body, cb, opts)
+This module was designed to send email out through a gmail account with
+a gmail username and password.  Uses TLS/SSL (required by gmail)
 
-Used something like this:
+The module exports a single function:
 
-	slicer = require("./slicer")		// i'll "modulate" this soon too
+### send(from, to, srcHost, opts, cb)
+
+Required arguments:
+
+	* from - The address to place in the "From:" header.  Also used for "mailfrom" in the SMTP conversation.
+	* to - The address to which the email will be sent
+	* srcHost - The domain name used for "helo" in the SMTP protocol
+
+Optional arguments:
+
+	* opts - An object containing additional optional values
+	* cb - Async all back function.  Called on errors, and when the email has been successfully sent.
+
+The callback function will either be passed an error argument or no argument if the email was
+sent successfully
+
+NOTE: 
+	
+	* The protocol will ALWAYS use AUTH and it will ALWAYS use TLS/SSL 
+
+Example: 
+
 	smtpclient = require("./smtpclient")
 
 	var from = "bart@simpsons.org"
 	var to = "lisa@simpsons.org"
-	var subject = "Hey Lisa ..."
-	var body = "Don't have a cow, man."
-
+	var srcHost = "sleepless.com"
 	var opts = {
+		subject: "Hey Lisa ...",
 		host: "smtp.gmail.com",
 		port: 25,
 		user: "sk8dude@gmail.com",
 		pass: "eatmyshorts",
+		body: "Don't have a cow, man.",
 	}
 
-	smtpclient.send(from, to, subject, body, function() { console.log("email sent!") }, opts)
+	smtpclient.send(from, to, subject, body, function(e) {
+		if(e) 
+			console.log("Error: "+e)
+		else
+			console.log("Email sent!")
+	}, opts)
 
 
