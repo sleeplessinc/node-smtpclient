@@ -24,7 +24,7 @@ Module exports a single function:
 Options provided in the `opts` argument will override the defaults.
 Supported options with their defaults:
 
-* `host` -- "localhost"
+* `host` -- "localhost" (the SMTP host)
 * `port` -- 25
 * `subject` -- "" 
 * `body` -- "" 
