@@ -13,7 +13,6 @@ Module exports a single function:
 
 * `from` -- Address to place in "From:" header.  Also used for "mailfrom" in SMTP conversation.
 * `to` -- Address to which the email will be sent
-* `srcHost` -- Domain name used for "helo" in the SMTP protocol
 * `opts` -- Object containing options which override defaults.  May be `{}`.
 
 ### Optional:
@@ -27,9 +26,9 @@ Supported options with their defaults:
 
 * `host` -- "localhost"
 * `port` -- 25
-* `subject` -- ""
-* `body` -- ""
-* `srcHost` -- "localhost"
+* `subject` -- "" 
+* `body` -- "" 
+* `srcHost` -- "localhost" (domain used for "helo" in the SMTP protocol)
 
 ## Example: 
 
