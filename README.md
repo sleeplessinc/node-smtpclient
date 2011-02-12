@@ -17,6 +17,8 @@ The module exports a single function:
 * `srcHost` -- The domain name used for "helo" in the SMTP protocol
 * `opts` -- An object containing additional optional values.  The opts object itself is required, but can be `{}`.  Any values in the object will override the defaults.
 
+** host -- "localhost"
+
 ### Optional arguments:
 
 * `cb` -- Async call back function.  Called on errors, and when the email has been successfully sent.
