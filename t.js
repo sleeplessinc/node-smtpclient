@@ -16,7 +16,7 @@ var send = function(o) {
 
 		var state = 0,
 			sock = null,
-			w = 0,
+			w = null,
 			chopper = new Chopper("\r\n"),
 			host = o.host || "localhost",
 			port = o.port || 465,
@@ -36,121 +36,106 @@ var send = function(o) {
 
 		sock = tls.connect(port, host, function () {
 			log("sock="+sock);
-			throwIf(!sock.authorized, sock.authorizationError);
-			log("sock="+sock);
 			log("sock.auth="+sock.authorized);
-			cb(o)
-		});
-		log("sock="+sock);
-		log("sock.auth="+sock.authorized);
+			throwIf(!sock.authorized, sock.authorizationError);
 
-		/*
-		sock = net.createConnection(port, host);
-		sock.on('connect', function(data) {
+			w = function(s) {
+				log("writing: " + s)
+				sock.write(s + "\r\n")
+			}
+
 			sock.setEncoding('utf8');
-		})
-		sock.on('error', function(e) {
-			cb(e)
-			cb = nofunc
-		})
-		sock.on('close', function() {
-			cb("Socket closed unexpectedly")
-			cb = nofunc
-		})
-		sock.on('secure', function(data) {
-			w("helo "+srcHost)
-			state++;
-		})
 
-		w = function(s) {
-			sock.write(s+"\r\n")
-		}
-
-		state = 0
-		cred = crypto.createCredentials()
-
-		sock.on('data', function(data) {
-			chopper.next(data, function(msg) {
-				var n = parseInt(msg)
-				if(n >= 200 && n <= 300) {
-					switch(state) {
-					case 0:
-						w("helo "+srcHost)
-						state++
-						break;
-					case 1:
-						w("STARTTLS")
-						state++
-						break;
-					case 2:
-						sock.setSecure(cred)
-						state++
-						break;
-					case 4:
-						w("auth login")
-						state++
-						break;
-					case 7:
-						w("mail from:<"+from+">")
-						state++
-						break;
-					case 8:
-						w("rcpt to:<"+to+">")
-						state++
-						break;
-					case 9:
-						w("data")
-						state++
-						break;
-					case 11:
-						w("quit")
-						sock.end()
-						cb(null)		// success
-						cb = nofunc
-						state++
-						break;
-					}
-				}
-				else
-				if(n >= 300 && n <= 400) {
-					switch(state) {
-					case 5:
-						w(user)
-						state++
-						break;
-					case 6:
-						w(pass)
-						state++
-						break;
-					case 10:
-						w("From: "+from)
-						w("To: "+to)
-						w("Subject: "+subject)
-						w("Message-ID: <"+(new Date().getTime())+from+">")
-						w("Content-Type: text/plain; charset=\"iso-8859-1\"")
-						w("")
-						body = body.replace(/\r\n/g, "\n")
-						body = body.replace(/\n/g, "\r\n")
-						w(body)
-						w("")
-						w(".")
-						state++
-						break;
-					}
-				}
-				else
-				if(n >= 500 && n <= 600) {
-					sock.end()
-					state++
-					cb(msg)
-					cb = nofunc
-				}
+			sock.on('error', function(e) {
+				log("on error " + e);
+				o.error = "error: "+e
+				callback(o)
 			})
-		})
-	*/
+			sock.on('close', function() {
+				log("on close");
+				o.error = "Socket closed unexpectedly"
+				callback(o);
+			})
+			sock.on('secure', function(data) {
+				log("on secure");
+				w("helo "+srcHost)
+				state++;
+			})
+
+			sock.on('data', function(data) {
+				chopper.next(data, function(msg) {
+					log("next msg is: "+msg)
+					var n = parseInt(msg)
+					if(n >= 200 && n <= 300) {
+						switch(state) {
+						case 0:
+							w("helo "+srcHost)
+							state++
+							break;
+						case 1:
+							w("auth login")
+							state++
+							break;
+						case 4:
+							w("mail from:<"+from+">")
+							state++
+							break;
+						case 5:
+							w("rcpt to:<"+to+">")
+							state++
+							break;
+						case 6:
+							w("data")
+							state++
+							break;
+						case 8:
+							w("quit")
+							sock.end()
+							callback(o)		// success
+							state++
+							break;
+						}
+					}
+					else
+					if(n >= 300 && n <= 400) {
+						switch(state) {
+						case 2:
+							w(user)
+							state++
+							break;
+						case 3:
+							w(pass)
+							state++
+							break;
+						case 7:
+							w("From: "+from)
+							w("To: "+to)
+							w("Subject: "+subject)
+							w("Message-ID: <"+(new Date().getTime())+from+">")
+							w("Content-Type: text/plain; charset=\"iso-8859-1\"")
+							w("")
+							body = body.replace(/\r\n/g, "\n")
+							body = body.replace(/\n/g, "\r\n")
+							w(body)
+							w("")
+							w(".")
+							state++
+							break;
+						}
+					}
+					else
+					if(n >= 500 && n <= 600) {
+						sock.end()
+						state++
+						o.error = msg;
+						callback(o)
+					}
+				})
+			})
+		});
 	} catch(e) {
 		o.error = e
-		cb(o)
+		callback(o)
 	}
 }
 exports.send = send
@@ -173,7 +158,7 @@ if(true) {
 		subject: "Testing ...",
 		body: "Don't have a cow, man.",
 		host: "smtp.gmail.com",
-		port: 25,
+		port: 465,
 		srcHost: "localhost",
 		callBack: cb,
 	}
