@@ -8,12 +8,10 @@ require("node-chopper")
 var throwIf = function(c, s) { if(c) throw s }
 var ver = parseFloat(process.version.replace(/[^\.0-9]+/, ""))
 var nofunc = function(){}
-var log = console.log
-
+var log = nofunc 
 
 var send = function(o) {
 	try {
-
 		var state = 0,
 			sock = null,
 			w = null,
@@ -35,8 +33,6 @@ var send = function(o) {
 		pass = (new Buffer(pass)).toString("base64")
 
 		sock = tls.connect(port, host, function () {
-			log("sock="+sock);
-			log("sock.auth="+sock.authorized);
 			throwIf(!sock.authorized, sock.authorizationError);
 
 			w = function(s) {
@@ -47,24 +43,21 @@ var send = function(o) {
 			sock.setEncoding('utf8');
 
 			sock.on('error', function(e) {
-				log("on error " + e);
 				o.error = "error: "+e
 				callback(o)
 			})
 			sock.on('close', function() {
-				log("on close");
 				o.error = "Socket closed unexpectedly"
 				callback(o);
 			})
 			sock.on('secure', function(data) {
-				log("on secure");
 				w("helo "+srcHost)
 				state++;
 			})
 
 			sock.on('data', function(data) {
 				chopper.next(data, function(msg) {
-					log("next msg is: "+msg)
+					log("reading: " + msg)
 					var n = parseInt(msg)
 					if(n >= 200 && n <= 300) {
 						switch(state) {
@@ -140,29 +133,26 @@ var send = function(o) {
 }
 exports.send = send
 
-
-if(true) {
-
+if(false) {
 	var cb = function(o) {
-		if(o.error)
-			console.log("Poo! "+o.error)
-		else
-			console.log("Yay!")
-	}
-
-	var o = {
-		from: "bart@sleepless.com",
-		to: "lisa@sleepless.com",
-		user:  "bart@sleepless.com",
-		pass: "xxxx",
-		subject: "Testing ...",
-		body: "Don't have a cow, man.",
-		host: "smtp.gmail.com",
-		port: 465,
-		srcHost: "localhost",
-		callBack: cb,
-	}
-
+			if(o.error)
+				console.log("Poo! "+o.error)
+			else
+				console.log("Yay!")
+		},
+		o = {
+			from: "bart@sleepless.com",
+			to: "lisa@sleepless.com",
+			user:  "bart@sleepless.com",
+			pass: "eatmyshorts",
+			subject: "Testing ...",
+			body: "Don't have a cow, man!",
+			host: "smtp.gmail.com",
+			port: 465,
+			srcHost: "sleepless.com",
+			callBack: cb,
+		}
+	log = console.log
 	send(o);
 }
 
