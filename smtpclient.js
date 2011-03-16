@@ -32,7 +32,10 @@ var send = function(o) {
 		user = (new Buffer(user)).toString("base64")
 		pass = (new Buffer(pass)).toString("base64")
 
+		log("connecting to "+host+":"+port)
+
 		sock = tls.connect(port, host, function () {
+
 			throwIf(!sock.authorized, sock.authorizationError);
 
 			w = function(s) {
@@ -133,12 +136,14 @@ var send = function(o) {
 }
 exports.send = send
 
-if(false) {
+if(true) {
+	log = console.log
+	log("ver "+ver)
 	var cb = function(o) {
 			if(o.error)
-				console.log("Poo! "+o.error)
+				log("Poo! "+o.error)
 			else
-				console.log("Yay!")
+				log("Yay!")
 		},
 		o = {
 			from: "bart@sleepless.com",
@@ -147,12 +152,11 @@ if(false) {
 			pass: "eatmyshorts",
 			subject: "Testing ...",
 			body: "Don't have a cow, man!",
-			host: "smtp.gmail.com",
+			host: "smtp.googlemail.com",
 			port: 465,
 			srcHost: "sleepless.com",
 			callBack: cb,
 		}
-	log = console.log
 	send(o);
 }
 
